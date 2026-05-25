@@ -13,7 +13,6 @@ resource "aws_iam_role" "ec2_iam_role" {
       }
     ]
   })
-
   tags = {
     Project     = var.project
     Environment = var.environment
@@ -21,16 +20,9 @@ resource "aws_iam_role" "ec2_iam_role" {
   }
 
 }
-
-resource "aws_iam_role_policy_attachment" "ec2_ssm_role" {
-  role       = aws_iam_role.ec2_iam_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-}
-
-
 resource "aws_iam_instance_profile" "ec2_profile" {
   name = "ec2-profile"
-  role = aws_iam_role.ec2_iam_role.name
+  role = aws_iam_role.ec2_iam_role.id
 
   tags = {
     Project     = var.project
@@ -59,8 +51,16 @@ resource "aws_iam_policy" "secrets_policy" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "secrets_policy_attachment" {
-  role       = aws_iam_role.ec2_iam_role.name
-  policy_arn = aws_iam_policy.secrets_policy.arn
+locals {
+ iam_policies = {
+    ssm = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    secrets = aws_iam_policy.secrets_policy.arn
+  }
 }
 
+resource "aws_iam_role_policy_attachment" "attachments" {
+  for_each = local.iam_policies
+
+  role = aws_iam_role.ec2_iam_role.name
+  policy_arn = each.value
+}

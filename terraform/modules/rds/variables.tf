@@ -14,3 +14,14 @@ variable "db_username" {
 variable "db_name" {
     type = string
 }
+
+variable "common_tags" {
+  type = map(string)
+  default = {
+    Project     = "devops-project"
+    Environment = "dev"
+    Owner       = "sid"
+    ManagedBy   = "terraform"
+    Application  = "web-app"
+  }
+}
