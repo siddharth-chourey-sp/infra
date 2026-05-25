@@ -4,7 +4,7 @@ const {
 } = require("@aws-sdk/client-secrets-manager");
 
 const client = new SecretsManagerClient({
-  region: "ap-southeast-2",
+  region: "rds!db-b3177dda-59b0-4d5d-ac22-57073d9bcdd4",
 });
 
 async function getSecrets() {
