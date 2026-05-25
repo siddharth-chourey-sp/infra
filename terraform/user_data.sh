@@ -2,6 +2,11 @@
 
 # Install packages
 dnf update -y
+dnf install -y amazon-ssm-agent
+
+sudo systemctl enable amazon-ssm-agent
+sudo systemctl start amazon-ssm-agent
+
 dnf install -y nodejs git nginx
 dnf install -y mariadb105
 
@@ -20,7 +25,6 @@ cd /home/ec2-user/devops-project/app
 
 # Install dependencies
 npm install @aws-sdk/client-secrets-manager
-
 
 # Start Node app
 nohup node server.js > app.log 2>&1 &

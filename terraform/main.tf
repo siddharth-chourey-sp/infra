@@ -1,5 +1,8 @@
 module "vpc" {
   source = "./modules/vpc"
+
+  public_subnets = var.public_subnets
+  private_subnets = var.private_subnets
 }
 
 module "alb" {
@@ -10,25 +13,24 @@ module "alb" {
   alb_sg_id      = aws_security_group.alb.id
 }
 
+
+locals {
+  alb_ports = [80, 443]
+}
 resource "aws_security_group" "alb" {
   name        = "alb-sg"
   description = "Security group for ALB"
   vpc_id      = module.vpc.vpc_id
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress" {
+    for_each = local.alb_ports
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0

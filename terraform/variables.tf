@@ -16,3 +16,19 @@ variable "project" {
 variable "db_user" {}
 
 variable "db_name" {}
+
+variable "public_subnets" {
+  description = "map of public subnet CIDR blocks"
+  type        = map(object({
+    cidr = string
+    az   = string
+  }))
+}
+
+variable "private_subnets" {
+    description = "map of private subnet CIDR blocks"
+    type        = map(object({
+      cidr = string
+      az   = string
+    }))
+}

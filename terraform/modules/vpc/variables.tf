@@ -5,16 +5,21 @@ variable "vpc_cidr" {
 }
 
 variable "public_subnets" {
-  description = "List of public subnet CIDR blocks"
-  type        = list(string)
-  default     = ["10.0.1.0/24", "10.0.2.0/24"]
+  description = "map of public subnet CIDR blocks"
+  type        = map(object({
+    cidr = string
+    az   = string
+  }))
 }
 
 variable "private_subnets" {
-    description = "List of private subnet CIDR blocks"
-    type        = list(string)
-    default     = ["10.0.3.0/24", "10.0.4.0/24"]
+    description = "map of private subnet CIDR blocks"
+    type        = map(object({
+      cidr = string
+      az   = string
+    }))
 }
+
 
 variable "azs" {
   description = "List of availability zones for the subnets"
@@ -23,12 +28,12 @@ variable "azs" {
 }
 
 variable "common_tags" {
+  type = map(string)
   default = {
     Project     = "devops-project"
     Environment = "dev"
     Owner       = "sid"
     ManagedBy   = "terraform"
     Application  = "web-app"
-    CostCenter  = "engineering"
   }
 }

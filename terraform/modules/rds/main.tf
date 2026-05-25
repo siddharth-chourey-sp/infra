@@ -2,9 +2,9 @@ resource "aws_db_subnet_group" "rds" {
     name = "db-subnet-group"
     subnet_ids = var.db_subnet_ids
 
-    tags = {
+    tags = merge(var.common_tags , {
         Name = "db-subnet-group"
-}
+    })
 }
 
 resource "aws_db_instance" "rds" {
