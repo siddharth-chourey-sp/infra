@@ -90,5 +90,5 @@ module "rds" {
   db_sg_id      = aws_security_group.rds.id
   db_username   = var.db_user
   db_name       = var.db_name
-  
+
 }
