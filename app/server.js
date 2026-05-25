@@ -5,32 +5,45 @@ const getSecrets = require("./secrets");
 const app = express();
 
 async function startServer() {
-  const secrets = await getSecrets();
+  try {
 
-  const connection = mysql.createConnection({
-    host: secrets.host,
-    user: secrets.user,
-    password: secrets.password,
-    database: secrets.database,
-    port: secrets.port,
-  });
+    const secrets = await getSecrets();
 
-  connection.connect((err) => {
-    if (err) {
-      console.error("DB connection failed:", err);
-      return;
-    }
+    console.log("Fetched Secrets:", secrets);
 
-    console.log("DB connected");
-  });
+    const connection = mysql.createConnection({
+      host: "webapp-db-instance.ct5xo0ovwdss.ap-southeast-2.rds.amazonaws.com",
+      user: secrets.username,
+      password: secrets.password,
+      database: "webapp",
+      port: 3306,
+    });
 
-  app.get("/health", (req, res) => {
-    res.send("OK");
-  });
+    connection.connect((err) => {
+      if (err) {
+        console.error("DB connection failed:", err);
+        process.exit(1);
+      }
 
-  app.listen(3000, "0.0.0.0", () => {
-    console.log("Server running");
-  });
+      console.log("DB connected");
+    });
+
+    app.get("/health", (req, res) => {
+      res.status(200).send("OK");
+    });
+
+    app.get("/", (req, res) => {
+      res.send("Application running successfully 🚀");
+    });
+
+    app.listen(3000, "0.0.0.0", () => {
+      console.log("Server running on port 3000");
+    });
+
+  } catch (error) {
+    console.error("Application startup failed:", error);
+    process.exit(1);
+  }
 }
 
 startServer();
