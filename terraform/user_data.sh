@@ -18,10 +18,10 @@ systemctl start nginx
 cd /home/ec2-user
 
 if [ ! -d "devops-project" ]; then
-  git clone https://github.com/siddharth-chourey-sp/devops-project.git
+  git clone https://github.com/siddharth-chourey-sp/web_app.git
 fi
 
-cd /home/ec2-user/devops-project/app
+cd /home/ec2-user/web_app
 
 # Install dependencies
 npm install @aws-sdk/client-secrets-manager

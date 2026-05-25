@@ -59,8 +59,8 @@ resource "aws_iam_policy" "secrets_policy" {
 }
 
 locals {
- iam_policies = {
-    ssm = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  iam_policies = {
+    ssm     = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
     secrets = aws_iam_policy.secrets_policy.arn
   }
 }
@@ -68,6 +68,6 @@ locals {
 resource "aws_iam_role_policy_attachment" "attachments" {
   for_each = local.iam_policies
 
-  role = aws_iam_role.ec2_iam_role.name
+  role       = aws_iam_role.ec2_iam_role.name
   policy_arn = each.value
 }
