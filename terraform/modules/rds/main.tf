@@ -26,7 +26,7 @@ resource "aws_db_instance" "rds" {
     vpc_security_group_ids = [var.db_sg_id]
     
     publicly_accessible = false
-    multi_az = true
+    multi_az = false
     
     storage_encrypted = true
 
